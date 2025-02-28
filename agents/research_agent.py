@@ -7,9 +7,8 @@ from utils.llm_setup import create_gemini_llm
 import json
 from pathlib import Path
 import logging
+from datetime import datetime
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class ResearchAgent:
@@ -25,7 +24,8 @@ class ResearchAgent:
         )
         
         # Ensure results directory exists
-        Path(settings.results_dir).mkdir(parents=True, exist_ok=True)
+        self.results_dir = Path(settings.results_dir)
+        self.results_dir.mkdir(parents=True, exist_ok=True)
     
     def execute(self, query: str, depth: str) -> Dict[str, Any]:
         """Execute the research process"""
@@ -33,17 +33,28 @@ class ResearchAgent:
             if not query or not isinstance(query, str):
                 raise ValueError("Query must be a non-empty string")
             
-            # Convert depth to Tavily's format
-            tavily_depth = "advanced" if depth.lower() == "deep" else "basic"
-            logger.debug(f"Using Tavily search_depth: {tavily_depth}")
+            # Ensure depth is correctly set
+            search_depth = "advanced" if depth.lower() == "advanced" else "basic"
+            logger.debug(f"Using Tavily search_depth: {search_depth}")
             
-            results = self._tavily_search(query, tavily_depth)
+            results = self._tavily_search(query, search_depth)
             
             if isinstance(results, dict) and "error" in results:
                 raise Exception(f"Search error: {results['error']}")
-                
-            self._store_results(results)
-            return results
+            
+            # Add metadata to results
+            results_with_metadata = {
+                "query": query,
+                "depth": search_depth,
+                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+                "user": "srikrishnavansi",  # Using the current user's login
+                "results": results
+            }
+            
+            # Store results
+            self._store_results(results_with_metadata)
+            
+            return results_with_metadata
             
         except Exception as e:
             logger.error(f"Research execution failed: {str(e)}", exc_info=True)
@@ -54,7 +65,7 @@ class ResearchAgent:
         try:
             response = self.tavily_client.search(
                 query=query,
-                search_depth=search_depth  # Using 'basic' or 'advanced'
+                search_depth=search_depth
             )
             logger.debug(f"Tavily API response received")
             return response
@@ -63,16 +74,25 @@ class ResearchAgent:
             error_msg = str(e)
             return {"error": error_msg}
     
-    def _store_results(self, results: Dict[str, Any]) -> bool:
-        """Store intermediate results to configured storage"""
+    def _store_results(self, results: Dict[str, Any]) -> None:
+        """Store research results with timestamp and metadata"""
         try:
-            results_file = Path(self.settings.results_dir) / "research_results.json"
-            results_file.parent.mkdir(parents=True, exist_ok=True)
+            # Create filename with timestamp and query
+            timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+            sanitized_query = "".join(c for c in results["query"][:30] if c.isalnum() or c in (' ', '-', '_')).strip()
+            filename = f"research_{timestamp}_{sanitized_query}.json"
             
-            with results_file.open("a") as f:
-                json.dump(results, f)
-                f.write("\n")
-            return True
+            # Ensure results directory exists
+            self.results_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Save results
+            file_path = self.results_dir / filename
+            with file_path.open('w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            
+            logger.debug(f"Results stored in: {file_path}")
+            
         except Exception as e:
             logger.error(f"Failed to store results: {str(e)}", exc_info=True)
-            return False
+            # Don't raise the exception - just log it
+            # This way, the research results can still be returned even if storage fails
