@@ -1,99 +1,204 @@
-# Multi-Agent Research System
+# Deep Research Assistant
 
-A sophisticated multi-agent system that performs deep research and synthesis using LLM-powered agents and the Tavily search API.
+**Current Date and Time (UTC):** 2025-02-28 13:45:49  
+**Current User:** srikrishnavansi  
+**Version:** 1.0.0  
 
 ## System Architecture
 
+### High-Level Overview
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '16px'}}}%%
+flowchart TD
+    subgraph FE[Frontend Layer]
+        UI[User Interface] --> SM[Session Manager]
+    end
+    
+    subgraph AL[Application Layer]
+        RC[Research Controller] --> SC[Synthesis Controller]
+    end
+    
+    subgraph IL[Integration Layer]
+        TS[Tavily Search] --> GM[Gemini Model]
+    end
+
+    SM --> RC
+    SC --> TS
+    SC --> GM
 ```
-Deep Research/
-├── agents/
-│   ├── __init__.py
-│   ├── research_agent.py   # Handles search and data collection
-│   └── synthesis_agent.py  # Processes and synthesizes research
-├── utils/
-│   ├── __init__.py
-│   └── llm_setup.py       # LLM configuration utilities
-├── config.py              # System configuration
-├── main.py               # CLI interface
-├── requirements.txt      # Dependencies
-└── .env                 # Environment variables (not tracked)
+
+## Core Components
+
+### 1. Research System Flow
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px'}}}%%
+sequenceDiagram
+    participant U as User
+    participant R as Research Controller
+    participant T as Tavily API
+    participant G as Gemini API
+    
+    U->>R: Submit Query
+    R->>T: Execute Search
+    T-->>R: Raw Results
+    R->>G: Process & Synthesize
+    G-->>R: Final Results
+    R->>U: Return Response
 ```
 
-## Key Features
+### 2. Data Processing Pipeline
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px'}}}%%
+graph LR
+    A[Query Input] --> B[Validation]
+    B --> C[Research]
+    C --> D[Synthesis]
+    D --> E[Results]
+```
 
-- **Dual-Agent Architecture**: Separate agents for research and synthesis
-- **Flexible Search Depth**: Configurable search depth (basic/advanced)
-- **Secure Configuration**: Environment-based secure configuration using Pydantic
-- **Modern LLM Integration**: Uses Gemini model via LangChain's latest patterns
-- **Structured Output**: JSON-formatted results with proper timestamps
-- **Robust Error Handling**: Comprehensive error handling and logging
-- **CLI Interface**: User-friendly command-line interface using Typer
+## Core Features
 
-## Technical Highlights
+### 1. Research Capabilities
+- Basic Research Mode
+  - Quick surface-level analysis
+  - Key points extraction
+  - Summary generation
 
-1. **Advanced LLM Integration**
-   - Uses LangChain's latest RunnableSequence pattern
-   - Implements ChatPromptTemplate for structured prompting
-   - Configurable model parameters (temperature, top_p, top_k)
+- Advanced Research Mode
+  - In-depth analysis
+  - Comprehensive data gathering
+  - Detailed synthesis
 
-2. **Secure Configuration**
-   - Pydantic-based settings management
-   - SecretStr for API key handling
-   - Environment-based configuration
+### 2. Data Processing
+- Query validation and preprocessing
+- Multi-source research integration
+- AI-powered synthesis
+- Result caching and optimization
 
-3. **Robust Search Implementation**
-   - Integration with Tavily API
-   - Configurable search depth
-   - Rate limiting and error handling
+### 3. Result Management
+- Structured data format
+- History tracking
+- Cache management
+- Error handling
 
-4. **Result Processing**
-   - Structured JSON output
-   - UTC timestamp standardization
-   - Automated result storage
+## Technical Implementation
 
-## Installation
+### 1. Core Configuration
+```python
+class Settings(BaseSettings):
+    # API Keys
+    tavily_api_key: SecretStr
+    google_api_key: SecretStr
+    
+    # Research Settings
+    max_results_per_query: int = 10
+    search_depth: SearchDepth = SearchDepth.BASIC
+    max_retries: int = 3
+    
+    # Session Info
+    current_timestamp: datetime = "2025-02-28 13:45:49"
+    current_user: str = "srikrishnavansi"
+```
 
+### 2. Error Handling Strategy
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '14px'}}}%%
+graph TD
+    A[Error Detection] --> B{Error Type}
+    B -->|API| C[Retry Logic]
+    B -->|Validation| D[User Feedback]
+    B -->|System| E[Logging]
+    C --> F[Resolution]
+    D --> F
+    E --> F
+```
+
+## System Requirements
+
+### Software
+- Python 3.8+
+- Required APIs:
+  - Tavily Search API
+  - Google Gemini API
+
+### Hardware
+- RAM: 4GB minimum
+- Storage: 1GB minimum
+- Stable internet connection
+
+### Dependencies
+```plaintext
+streamlit>=1.24.0
+pydantic>=2.0.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+```
+
+## Development Roadmap
+
+### Phase 1 (Completed)
+✅ Core research functionality
+✅ API integrations
+✅ Basic synthesis
+✅ Error handling
+
+### Phase 2 (Current)
+🔄 Advanced caching
+🔄 Multiple research strategies
+🔄 Performance optimization
+
+### Phase 3 (Planned)
+📅 Machine learning integration
+📅 Custom research templates
+📅 Advanced analytics
+
+## Project Structure
+```
+deep_research/
+├── app.py                  # Main application
+├── config.py              # Configuration
+├── static/                # Static assets
+├── agents/                # Core agents
+│   ├── research_agent.py
+│   └── synthesis_agent.py
+├── models/                # Data models
+├── utils/                 # Utilities
+├── requirements.txt
+└── README.md
+```
+
+## Getting Started
+
+1. Clone the repository
+2. Create .env file:
+```plaintext
+TAVILY_API_KEY=your-tavily-api-key
+GOOGLE_API_KEY=your-google-api-key
+```
+
+3. Install dependencies:
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/deep_research.git
-cd deep_research
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys
 ```
 
-## Usage
-
+4. Run the application:
 ```bash
-# Basic search
-python main.py "Your research query" --depth basic
-
-# Advanced search with debug output
-python main.py "Your research query" --depth advanced --debug
+streamlit run app.py
 ```
 
-## Security Notes
+## Documentation
 
-- API keys are stored securely using Pydantic's SecretStr
-- .env file is excluded from version control
-- Results are stored with proper access controls
-
-## Future Enhancements
-
-1. Integration with additional search APIs
-2. Enhanced result caching system
-3. Web interface implementation
-4. Result visualization capabilities
-5. Multi-language support
+Detailed documentation available for:
+- API Integration
+- Research Strategies
+- Data Models
+- Error Handling
+- Cache Management
+- Results Processing
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Please refer to CONTRIBUTING.md for:
+- Code standards
+- Pull request process
+- Development guidelines
