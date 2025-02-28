@@ -1,0 +1,297 @@
+/* Dark theme base colors */
+:root {
+    --background: #0e1117;
+    --secondary-background: #262730;
+    --text-color: #fafafa;
+    --secondary-text-color: #9ca3af;
+    --primary-color: #3b82f6;
+    --secondary-color: #60a5fa;
+    --card-background: #1f2937;
+    --border-color: #374151;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+}
+
+/* Base styles */
+.stApp {
+    background-color: var(--background);
+    color: var(--text-color);
+}
+
+/* Header styles */
+.main-header {
+    text-align: center;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.main-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-color) !important;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Session info */
+.session-info {
+    background: var(--card-background);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.session-info p {
+    color: var(--text-color);
+    margin: 0.5rem 0;
+}
+
+.session-info strong {
+    color: var(--primary-color);
+}
+
+/* Research process */
+.process-step {
+    background: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.process-step h4 {
+    color: var(--primary-color) !important;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.process-step p {
+    color: var(--text-color);
+}
+
+/* Results containers */
+.results-summary, .results-details {
+    background: var(--card-background);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.results-summary h3, .results-details h3 {
+    color: var(--primary-color) !important;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Summary content styling */
+.summary-content {
+    color: var(--text-color) !important;
+    line-height: 1.6;
+}
+
+.summary-content h1, 
+.summary-content h2, 
+.summary-content h3 {
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+    margin: 1rem 0 !important;
+}
+
+.summary-content p {
+    color: var(--text-color) !important;
+    margin: 0.8rem 0;
+}
+
+.summary-content ul, 
+.summary-content ol {
+    color: var(--text-color) !important;
+    margin: 0.8rem 0;
+    padding-left: 1.5rem;
+}
+
+/* Metrics styling */
+.metric-container {
+    background: var(--card-background);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.metric-label {
+    color: var(--secondary-text-color) !important;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.metric-value {
+    color: var(--primary-color) !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Details card */
+.details-card {
+    background: var(--card-background);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.details-card p {
+    color: var(--text-color);
+    margin: 0.5rem 0;
+}
+
+.details-card strong {
+    color: var(--primary-color);
+}
+
+/* History section */
+.history-header h3 {
+    color: var(--primary-color) !important;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.history-item {
+    background: var(--card-background);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.history-item p {
+    color: var(--text-color);
+    margin: 0.25rem 0;
+}
+
+.history-item strong {
+    color: var(--primary-color);
+}
+
+/* Input field styling */
+.stTextInput > div > div > input {
+    background-color: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Button styling */
+.stButton > button {
+    background-color: var(--primary-color) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+    padding: 0.5rem 2rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.stButton > button:hover {
+    background-color: var(--secondary-color) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Tab styling */
+.stTabs [data-baseweb="tab"] {
+    color: var(--text-color) !important;
+    background-color: transparent !important;
+    font-weight: 500 !important;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    color: var(--primary-color) !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+.stTabs [data-baseweb="tab-panel"] {
+    background-color: transparent !important;
+    padding: 1rem 0;
+}
+
+/* Expander styling */
+.streamlit-expanderHeader {
+    background-color: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 0.5rem !important;
+}
+
+/* Progress bar */
+.stProgress > div > div > div {
+    background-color: var(--primary-color) !important;
+}
+
+/* JSON viewer */
+.element-container pre {
+    background-color: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+/* Select slider */
+.stSlider > div > div {
+    background-color: var(--card-background) !important;
+}
+
+.stSlider > div > div > div[role="slider"] {
+    background-color: var(--primary-color) !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-header h1 {
+        font-size: 2rem;
+    }
+    
+    .metric-container {
+        margin: 0.5rem 0;
+    }
+    
+    .process-step {
+        padding: 1rem;
+    }
+}
